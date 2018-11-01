@@ -2,6 +2,7 @@ package com.test.base;
 
 import com.test.util.Constants;
 import com.test.util.reporter.Reporter;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.ITest;
@@ -46,6 +47,11 @@ public class BaseTest implements ITest {
         driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
     }
 
+    private void setupIOsDriver(String hubUrl, DesiredCapabilities capabilities) throws IOException {
+        driver = new IOSDriver(new URL(hubUrl), capabilities);
+        driver.manage().timeouts().implicitlyWait(Constants.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+    }
+
 
     private void closeBrowser() {
         if (driver != null)
@@ -54,28 +60,35 @@ public class BaseTest implements ITest {
 
 
     @BeforeClass
-    @Parameters({"hubUrl", "deviceName", "platformName", "platformVersion", "udid", "browserName", "orientation", "noReset"})
-    public void startBrowser(String hubUrl, String deviceName, String platformName, String platformVersion,
-                             String udid, String browserName, String orientation, String noReset) throws IOException {
+    @Parameters({"hubUrl", "deviceName", "platformName",
+            "platformVersion", "browserName", "orientation",
+            "noReset", "udid", "accessKey", "username"})
+    public void startBrowser(
+            String hubUrl, String deviceName, String platformName, String platformVersion,
+            String browserName, String orientation, String noReset,
+            String udid, @Optional String accessKey, @Optional String username) throws IOException {
 
+        String sauceHubUrl = String.format(hubUrl, username, accessKey);
         String message = "* Starting test " + this.getClass().toString();
         Reporter.log("\n" + message);
         System.out.println(message);
 
-        DesiredCapabilities capabilities = DesiredCapabilities.android();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("deviceName", deviceName);
         capabilities.setCapability("platformName", platformName);
         capabilities.setCapability("platformVersion", platformVersion);
-        capabilities.setCapability("udid", udid);
         capabilities.setCapability("browserName", browserName);
         capabilities.setCapability("orientation", orientation);
         capabilities.setCapability("noReset", noReset);
+        capabilities.setCapability("udid", udid);
 
         String browser = Constants.DEFAULT_BROWSER;
 
-        if (browser.equalsIgnoreCase("mobile_chrome"))
+        if (browser.equalsIgnoreCase("mobile_chrome")) {
             setupRemoteDriver(hubUrl, capabilities);
-        else throw new IllegalArgumentException();
+        } else if (browser.equalsIgnoreCase("mobile_safari")) {
+            setupIOsDriver(sauceHubUrl, capabilities);
+        } else throw new IllegalArgumentException(String.format("Browser type '%s' is unidentified...", browser));
     }
 
     @AfterClass(alwaysRun = true)
@@ -83,6 +96,4 @@ public class BaseTest implements ITest {
         Reporter.log("Stopping WebDriver");
         closeBrowser();
     }
-
-
 }

@@ -1,0 +1,30 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="iOSSuite">
+
+    <parameter name="searchText" value="Java"/>
+    <parameter name="expectedBookName" value="Head First Java, 2nd Edition"/>
+    <parameter name="expectedBookAuthor" value="Kathy Sierra"/>
+
+    <test name="ios">
+
+        <parameter name="hubUrl" value="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"/>
+        <parameter name="accessKey" value="c6d32ca4-6e59-454c-8021-2e3d1f3fd374"/>
+        <parameter name="username" value="mastertests"/>
+
+        <parameter name="deviceName" value="iPhone 6"/>
+        <parameter name="platformName" value="iOS"/>
+        <parameter name="platformVersion" value="11.0"/>
+        <parameter name="udid" value=""/>
+        <parameter name="browserName" value="Safari"/>
+        <parameter name="orientation" value="PORTRAIT"/>
+        <parameter name="noReset" value="true"/>
+
+        <classes>
+            <class name="com.test.FirstTest"/>
+        </classes>
+
+    </test>
+
+</suite>

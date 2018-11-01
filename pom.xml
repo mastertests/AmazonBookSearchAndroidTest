@@ -12,6 +12,7 @@
     <properties>
         <browser>mobile_chrome</browser>
         <baseurl>https://www.amazon.com/</baseurl>
+        <suite>AndroidSuite.xml</suite>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <src.dir>${basedir}${file.separator}src${file.separator}main${file.separator}java</src.dir>
         <path.to.driver>${basedir}${file.separator}lib${file.separator}driver</path.to.driver>
@@ -122,6 +123,12 @@
             <version>[2.52.0,)</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.appium</groupId>
+            <artifactId>java-client</artifactId>
+            <version>[5.0.2,)</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -160,7 +167,7 @@
                         <reportsDirectory>${report.dir}</reportsDirectory>
                         <argLine>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5015</argLine>
                         <suiteXmlFiles>
-                            <suiteXmlFile>${testng.dir}${file.separator}testng.xml</suiteXmlFile>
+                            <suiteXmlFile>${testng.dir}${file.separator}${suite}</suiteXmlFile>
                         </suiteXmlFiles>
                         <properties>
                             <property>

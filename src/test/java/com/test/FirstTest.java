@@ -4,31 +4,43 @@ import com.test.actions.Actions;
 import com.test.base.BaseTest;
 import com.test.entity.Book;
 import com.test.pages.Pages;
+import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.util.List;
-
 public class FirstTest extends BaseTest {
+
+    private Book expectedBook;
+
+    @BeforeTest
+    @Parameters({"expectedBookName", "expectedBookAuthor"})
+    public void setExpectedBook(String expectedBookName, String expectedBookAuthor) {
+        expectedBook = new Book(
+                expectedBookName,
+                expectedBookAuthor
+        );
+    }
 
     @Test
     public void openAmazonPage() {
         Actions.mainActions().openMainPage();
     }
 
-    @Test
+    @Test(dependsOnMethods = {"openAmazonPage"})
     @Parameters({"searchText"})
-    public void openResultPage(String searchText) {
-        List<Book> books = Pages.searchResultPage().getSearchBookResult(searchText);
-        boolean isExist = false;
+    public void setSearchText(String searchText) {
 
-        for (Book book : books)
-            if (book.getName().equals("Head First Java, 2nd Edition"))
-                isExist = true;
+        Pages.headerPage().setSearchString(searchText);
+        Pages.headerPage().clickSearchButton();
+    }
 
-        if (isExist)
-            System.out.println("Head First Java, 2nd Edition is on the list");
-        else
-            System.out.println("Head First Java, 2nd Edition is NOT on the list");
+    @Test(dependsOnMethods = {"setSearchText"})
+    public void openResultPage() {
+
+        Assert.assertTrue(
+                Book.containsIn(Pages.searchResultPage().getSearchBookResult(), expectedBook),
+                expectedBook.getName() + " is NOT on the list"
+        );
     }
 }

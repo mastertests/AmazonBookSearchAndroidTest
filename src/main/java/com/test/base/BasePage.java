@@ -10,9 +10,6 @@ import com.test.util.reporter.Reporter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.HasInputDevices;
-import org.openqa.selenium.interactions.Mouse;
-import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -292,7 +289,10 @@ public class BasePage {
         String winHandleBefore = BaseTest.driver.getWindowHandle();
 
         for (String winHandle : BaseTest.driver.getWindowHandles()) {
-            BaseTest.driver.switchTo().window(winHandle);
+            if (!winHandleBefore.equals(winHandle))
+                BaseTest.driver.switchTo().window(winHandle);
+            else
+                BaseTest.driver.switchTo().window(winHandleBefore);
         }
     }
 
@@ -460,19 +460,19 @@ public class BasePage {
         executeJS(javaScript, locatorXpath);
     }
 
-    protected void mouseDown(String message, Locator locator, Object... args) {
-        Reporter.log(message);
-        Locatable mouseDownItem = (Locatable) getElement(locator, args);
-        Mouse mouse = ((HasInputDevices) BaseTest.driver).getMouse();
-        mouse.mouseDown(mouseDownItem.getCoordinates());
-    }
-
-    protected void mouseUp(String message, Locator locator, Object... args) {
-        Reporter.log(message);
-        Locatable mouseDownItem = (Locatable) getElement(locator, args);
-        Mouse mouse = ((HasInputDevices) BaseTest.driver).getMouse();
-        mouse.mouseUp(mouseDownItem.getCoordinates());
-    }
+//    protected void mouseDown(String message, Locator locator, Object... args) {
+//        Reporter.log(message);
+//        Locatable mouseDownItem = (Locatable) getElement(locator, args);
+//        Mouse mouse = ((HasInputDevices) BaseTest.driver).getMouse();
+//        mouse.mouseDown(mouseDownItem.getCoordinates());
+//    }
+//
+//    protected void mouseUp(String message, Locator locator, Object... args) {
+//        Reporter.log(message);
+//        Locatable mouseDownItem = (Locatable) getElement(locator, args);
+//        Mouse mouse = ((HasInputDevices) BaseTest.driver).getMouse();
+//        mouse.mouseUp(mouseDownItem.getCoordinates());
+//    }
 
     protected void mouseScroll(int x, int y) {
         JavascriptExecutor js = (JavascriptExecutor) BaseTest.driver;
@@ -522,8 +522,9 @@ public class BasePage {
         }
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected String executeJSWithReturn(String script, WebElement element) {
-        return (String) ((JavascriptExecutor) BaseTest.driver).executeScript(script, element);
+        return String.valueOf(((JavascriptExecutor) BaseTest.driver).executeScript(script, element));
     }
 
     public String getElementTextUsingJSByCss(String message, CSS locator, Object... args) {
@@ -548,8 +549,6 @@ public class BasePage {
         } catch (AWTException exception) {
             exception.printStackTrace();
         }
-
-
     }
 
     @Deprecated

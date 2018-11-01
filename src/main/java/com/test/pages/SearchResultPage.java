@@ -1,5 +1,6 @@
 package com.test.pages;
 
+import com.test.actions.Actions;
 import com.test.base.BasePage;
 import com.test.entity.Book;
 import com.test.locators.Locator;
@@ -12,57 +13,79 @@ import java.util.List;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class SearchResultPage extends BasePage {
-    private final Locator resultItems = new XPath("//ul[@id='resultItems']/li/a");
-    private final String bookContainer = "//li[@class='sx-table-item']";
+    private final Locator resultItems = new XPath("//ul[@id='resultItems']/li[@class='sx-table-item']");
+    private final String tableItem = "//li[@class='sx-table-item']";
 
-    private final String bookName = "//div[@class='sx-table-detail']/h5/span";
-    private final String bookAuthor = "//div[@class='a-row a-spacing-micro a-size-small a-color-secondary']/span[2]";
-    private final String bookPrice = "//div[@class='a-row']/span[@class='a-size-small a-color-price a-text-bold']";
-    private final String bookRatio = "//span[@class='a-icon-alt']";
-    private final String bookBestSeller = "//span[@class='a-badge']";
+    private final Locator bookName = new XPath(tableItem + "//div[@class='sx-table-detail']/h5/span");
+    private final Locator bookAuthor = new XPath(tableItem + "//div[@class='sx-table-detail']/div[1]/span[2]");
+    private final Locator bookPrice = new XPath(tableItem + "//div[@class='a-row']/span[contains(@class, 'a-text-bold')]");
+    private final Locator bookRatio = new XPath(tableItem + "[%s]//span[@class='a-icon-alt']");
+    private final Locator bookBestSeller = new XPath(tableItem + "[%s]//span[@class='a-badge']");
 
-    private void setSearchText(String searchString) {
-        HeaderPage page = Pages.headerPage();
+    public List<Book> getSearchBookResult() {
+        Reporter.log("Getting result items --> ");
 
-        page.setSearchString(searchString);
-        page.clickSearchButton();
+        return Actions.searchActions().getBooks();
     }
 
-    public List<Book> getSearchBookResult(String searchString) {
-        setSearchText(searchString);
+    public int getBooksNumber() {
+        return getElementsCount(resultItems);
+    }
 
-        Reporter.log("Getting result items for search --> " + searchString + "  ");
+    public List<String> getBooksName() {
+        List<WebElement> nameElements = getElements(bookName);
+        ArrayList<String> names = new ArrayList<>();
+        for (WebElement name : nameElements)
+            names.add(name.getText());
 
-        List<WebElement> resultItems = getElements(this.resultItems);
+        return names;
+    }
 
-        List<Book> books = new ArrayList<>();
+    public List<String> getBooksAuthor() {
+        ArrayList<String> authors = new ArrayList<>();
+        for (WebElement author : getElements(bookAuthor))
+            authors.add(author.getText());
 
-        for (int i = 1; i <= resultItems.size(); i++) {
+        return authors;
+    }
 
-            String resultItem = bookContainer + "[" + i + "]";
-
-            String name = getElement(new XPath(resultItem + bookName)).getText();
-
-            String author = getElement(new XPath(resultItem + bookAuthor)).getText();
-
-            double price = Double.valueOf(getElement(new XPath(resultItem + bookPrice)).getText().replace("$", ""));
-
-            String ratio = "No ratio";
-            if (isElementPresent(new XPath(resultItem + bookRatio))) {
-                ratio = executeJSWithReturn(
-                        "return arguments[0].textContent;",
-                        getElement(new XPath(resultItem + bookRatio)));
-                ratio = ratio.replace(" out of 5 stars", "");
-            }
-
-            boolean isBestSeller = isElementPresent(new XPath(resultItem + bookBestSeller));
-
-            Book book = new Book(name, author, price, ratio, isBestSeller);
-
-            System.out.println(book.toString());
-            books.add(book);
+    public List<Double> getBooksPrice() {
+        List<WebElement> priceElements = getElements(bookPrice);
+        List<Double> prices = new ArrayList<>();
+        for (WebElement price : priceElements) {
+            prices.add(Double.valueOf(price.getText().replace("$", "")));
         }
 
-        return books;
+        return prices;
+    }
+
+    public List<String> getBooksRatio() {
+        ArrayList<String> ratios = new ArrayList<>();
+        for (int i = 1; i <= getBooksNumber(); i++) {
+            ratios.add(setRatio(bookRatio, i));
+        }
+
+        return ratios;
+    }
+
+    public List<Boolean> getBooksBestSeller() {
+        ArrayList<Boolean> bestSellers = new ArrayList<>();
+        for (int i = 1; i <= getBooksNumber(); i++) {
+            bestSellers.add(isElementPresent(bookBestSeller, i));
+        }
+
+        return bestSellers;
+    }
+
+    private String setRatio(Locator locator, Object... args) {
+        String ratio = "No ratio";
+        if (isElementPresent(locator, args)) {
+            ratio = executeJSWithReturn(
+                    "return arguments[0].textContent;",
+                    getElement(locator, args)
+            );
+            ratio = ratio.replace(" out of 5 stars", "");
+        }
+        return ratio;
     }
 }
