@@ -11,10 +11,10 @@
 
         <parameter name="hubUrl" value="http:\\127.0.0.1:4723\wd\hub"/>
 
-        <parameter name="deviceName" value="Android Pixel 2"/>
+        <parameter name="deviceName" value="Android MI"/>
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="8.1"/>
-        <parameter name="udid" value="HT7A31A01350"/>
+        <parameter name="udid" value="2b08be0b9805"/>
         <parameter name="browserName" value="Chrome"/>
         <parameter name="orientation" value="PORTRAIT"/>
         <parameter name="noReset" value="true"/>
