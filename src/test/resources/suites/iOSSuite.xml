@@ -9,7 +9,7 @@
 
     <test name="ios">
 
-        <parameter name="hubUrl" value="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"/>
+        <parameter name="hubUrl" value="http:\\127.0.0.1:4723\wd\hub"/>
         <parameter name="accessKey" value="c6d32ca4-6e59-454c-8021-2e3d1f3fd374"/>
         <parameter name="username" value="mastertests"/>
 

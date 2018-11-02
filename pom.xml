@@ -10,9 +10,9 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <browser>mobile_chrome</browser>
+        <browser>mobile_safari</browser>
         <baseurl>https://www.amazon.com/</baseurl>
-        <suite>AndroidSuite.xml</suite>
+        <suite>iOSSuite.xml</suite>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <src.dir>${basedir}${file.separator}src${file.separator}main${file.separator}java</src.dir>
         <path.to.driver>${basedir}${file.separator}lib${file.separator}driver</path.to.driver>

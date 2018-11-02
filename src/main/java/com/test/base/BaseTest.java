@@ -73,7 +73,7 @@ public class BaseTest implements ITest {
             String browserName, String orientation, String noReset,
             String udid, @Optional String accessKey, @Optional String username) throws IOException {
 
-        String sauceHubUrl = String.format(hubUrl, username, accessKey);
+//        String sauceHubUrl = String.format(hubUrl, username, accessKey);
         String message = "* Starting test " + this.getClass().toString();
         Reporter.log("\n" + message);
         System.out.println(message);
@@ -92,7 +92,7 @@ public class BaseTest implements ITest {
         if (browser.equalsIgnoreCase("mobile_chrome")) {
             setupRemoteDriver(hubUrl, capabilities);
         } else if (browser.equalsIgnoreCase("mobile_safari")) {
-            setupIOsDriver(sauceHubUrl, capabilities);
+            setupIOsDriver(hubUrl, capabilities);
         } else throw new IllegalArgumentException(String.format("Browser type '%s' is unidentified...", browser));
     }
 
