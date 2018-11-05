@@ -14,10 +14,10 @@
         <parameter name="accessKey" value="c6d32ca4-6e59-454c-8021-2e3d1f3fd374"/>
         <parameter name="username" value="mastertests"/>
 
-        <parameter name="deviceName" value="iPhone 5s"/>
+        <parameter name="deviceName" value="iPhone 8"/>
         <parameter name="platformName" value="iOS"/>
-        <parameter name="platformVersion" value="9.3"/>
-        <parameter name="udid" value=""/>
+        <parameter name="platformVersion" value="12.1"/>
+        <parameter name="udid" value="857B6B89-06A0-4C0C-A9A9-F7C5B45AF74A"/>
         <parameter name="browserName" value="Safari"/>
         <parameter name="orientation" value="PORTRAIT"/>
         <parameter name="noReset" value="true"/>
