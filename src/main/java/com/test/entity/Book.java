@@ -66,7 +66,7 @@ public class Book {
         this.bestSeller = bestSeller;
     }
 
-    public static boolean containsIn(List<Book> books, Book expectedBook) {
+    public static boolean contains(List<Book> books, Book expectedBook) {
         boolean isExist = false;
 
         for (Book book : books)

@@ -27,9 +27,10 @@ public class FirstTest extends BaseTest {
 
         Pages.headerPage().setSearchString(searchText);
         Pages.headerPage().clickSearchButton();
+        Pages.headerPage().wait(60);
 
         Assert.assertTrue(
-                Book.containsIn(Pages.searchResultPage().getSearchBookResult(), expectedBook),
+                Book.contains(Pages.searchResultPage().getSearchBookResult(), expectedBook),
                 expectedBook.getName() + " is NOT on the list"
         );
     }

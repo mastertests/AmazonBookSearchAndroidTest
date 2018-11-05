@@ -1,6 +1,7 @@
 package com.test.base;
 
 import com.test.actions.Actions;
+import com.test.pages.Pages;
 import com.test.util.Constants;
 import com.test.util.reporter.Reporter;
 import io.appium.java_client.ios.IOSDriver;
@@ -62,6 +63,7 @@ public class BaseTest implements ITest {
     @Test(priority = -1)
     public void openAmazonPage() {
         Actions.mainActions().openMainPage();
+        Pages.headerPage().wait(60);
     }
 
     @BeforeClass

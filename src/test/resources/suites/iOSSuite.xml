@@ -10,12 +10,13 @@
     <test name="ios">
 
         <parameter name="hubUrl" value="http:\\127.0.0.1:4723\wd\hub"/>
+
         <parameter name="accessKey" value="c6d32ca4-6e59-454c-8021-2e3d1f3fd374"/>
         <parameter name="username" value="mastertests"/>
 
-        <parameter name="deviceName" value="iPhone 6"/>
+        <parameter name="deviceName" value="iPhone 5s"/>
         <parameter name="platformName" value="iOS"/>
-        <parameter name="platformVersion" value="11.0"/>
+        <parameter name="platformVersion" value="9.3"/>
         <parameter name="udid" value=""/>
         <parameter name="browserName" value="Safari"/>
         <parameter name="orientation" value="PORTRAIT"/>
